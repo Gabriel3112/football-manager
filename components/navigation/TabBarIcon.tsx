@@ -1,9 +1,81 @@
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+import React from "react";
+import { Pressable, StyleSheet, LayoutChangeEvent } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import StadiumIcon from "@/assets/icons/StadiumIcon";
+import StadiumIconOutline from "@/assets/icons/StadiumIconOutline";
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { type IconProps } from '@expo/vector-icons/build/createIconSet';
-import { type ComponentProps } from 'react';
+type TabBarIconProps = {
+  onPress: () => void;
+  focused: boolean;
+  routeName: string;
+  activeColor: string;
+  fillColor: string;
+  onLayout: (event: LayoutChangeEvent) => void;
+};
 
-export function TabBarIcon({ style, ...rest }: IconProps<ComponentProps<typeof Ionicons>['name']>) {
-  return <Ionicons size={28} style={[{ marginBottom: -3 }, style]} {...rest} />;
-}
+const TabBarIcon: React.FC<TabBarIconProps> = ({
+  onPress,
+  focused,
+  routeName,
+  activeColor,
+  fillColor,
+  onLayout,
+}) => {
+  const renderIcon = () => {
+    switch (routeName) {
+      case "coach":
+        return focused ? (
+          <Ionicons name="person" color={activeColor} size={28} />
+        ) : (
+          <Ionicons name="person-outline" color={activeColor} size={28} />
+        );
+      case "calendar":
+        return focused ? (
+          <Ionicons name="calendar" color={activeColor} size={28} />
+        ) : (
+          <Ionicons name="calendar-outline" color={activeColor} size={28} />
+        );
+      case "index":
+        return focused ? (
+          <Ionicons name="football" color={activeColor} size={45} />
+        ) : (
+          <Ionicons name="football-outline" color={activeColor} size={45} />
+        );
+      case "manager":
+        return focused ? (
+          <StadiumIcon
+            width={30}
+            height={30}
+            color={activeColor}
+            fill={fillColor}
+          />
+        ) : (
+          <StadiumIconOutline width={30} height={30} color={activeColor} />
+        );
+      case "news":
+        return focused ? (
+          <Ionicons name="newspaper" color={activeColor} size={28} />
+        ) : (
+          <Ionicons name="newspaper-outline" color={activeColor} size={28} />
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Pressable style={styles.container} onLayout={onLayout} onPress={onPress}>
+      {renderIcon()}
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
+
+export default TabBarIcon;
